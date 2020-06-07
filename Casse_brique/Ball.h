@@ -5,10 +5,14 @@
 
 class Ball : public GameObject
 {
+    Q_OBJECT
+
     public:
-        Ball();
+        Ball(int x = -10, int y = -100);
         QGraphicsItem* getItem();
         void update();
+    signals:
+        void lose_ball();
 
     private:
         QGraphicsEllipseItem* ball;

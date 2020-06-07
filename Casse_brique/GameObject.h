@@ -7,7 +7,7 @@
 #include <QGraphicsItem>
 #include <QVector2D>
 
-class GameObject
+class GameObject : public QObject
 {
     public :
     GameObject(int x, int y, int w, int h , QVector2D *v);

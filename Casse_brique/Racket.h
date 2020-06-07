@@ -7,13 +7,13 @@
 class Racket : public GameObject
 {
     public:
-        Racket(Ball* ball);
+        Racket(QList<Ball*>* ball);
         QGraphicsItem* getItem();
         void update();
         bool keyRight;
         bool keyLeft;
         int speed;
-        GameObject* ball;
+        QList<Ball*>* balls;
 
     private:
         QGraphicsRectItem* racket;

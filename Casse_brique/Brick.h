@@ -8,16 +8,40 @@
 class Brick : public GameObject
 {
     public:
-        Brick(Ball* ball, int x, int y);
+        Brick(QList<Ball*>* ball, int x, int y);
         QGraphicsItem* getItem();
         void update();
+        void del();
         void setColor();
         static int score;
-    private :
+    protected:
         QGraphicsRectItem* rect;
-        Ball* ball;
+        QList<Ball*>* ball;
+        int durability;
+        bool hit;
 };
 
+class Br_Solid: public Brick
+{
+    public:
+        Br_Solid(QList<Ball*>* ball, int x, int y);
+        QGraphicsItem* getItem();
+        void update();
+    private:
+};
+
+class Br_Ball: public Brick
+{
+    Q_OBJECT
+
+    public:
+        Br_Ball(QList<Ball*>* ball, int x, int y);
+        QGraphicsItem* getItem();
+        void update();
+    signals:
+    void new_Ball();
+    private:
+};
 
 class Score : public GameObject
 {

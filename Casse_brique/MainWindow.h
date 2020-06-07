@@ -10,6 +10,8 @@
 #include <QKeyEvent>
 #include <Racket.h>
 #include <QLabel>
+#include <QList>
+#include <Ball.h>
 
 class MainWindow: public QWidget
 {
@@ -22,6 +24,7 @@ class MainWindow: public QWidget
         void keyReleaseEvent(QKeyEvent *event);
     public slots :
         void update();
+        void add_Ball();
 
     private:
         QGraphicsView *view;
@@ -30,6 +33,11 @@ class MainWindow: public QWidget
         QTimer * timer;
         QList<GameObject*> items;
         Racket* racket;
+        QWidget* menu;
+        QLabel* score;
+        QList<Ball*>* balles;
+        int speed;
+        int lvl_special_bricks;
 
 };
 

@@ -11,30 +11,64 @@
 #include <QKeyEvent>
 #include <QDebug>
 #include <QList>
+#include <QApplication>
 
 MainWindow::MainWindow() : QWidget()
 {
-    this->setFixedSize(600, 700);
+
+    srand (time(NULL));
+    speed = 10;
+    lvl_special_bricks = 30;
+    this->setFixedSize(600, 750);
 
     timer = new QTimer(this);
     scene = new QGraphicsScene();
 
+    menu = new QWidget(this);
+    menu->setFixedSize(600,50);
+    menu->setStyleSheet("background-color: black;");
+
+    score = new QLabel(menu);
+    score->setStyleSheet("background-color: rgb(93,93,93); color: white;");
+    score->setFont(QFont("Times", 15, QFont::Bold));
+    score->setFixedSize(150, 50);
+
+
+    score->setText("Score : " + QString::number(Brick::score));
+
+    balles = new QList<Ball*>;
     Ball* ball = new Ball();
+    balles->append(ball);
     items.append(ball);
     scene->addItem(ball->getItem());
 
+    QVector<int> s_bricks;
+    int cpt = 0;
+    for(int i = 0 ; i < lvl_special_bricks ; i++)
+    {
+        s_bricks.append(qrand() % 156 +1);
+    }
     for(int x = -300; x < 300; x = x + 50)
     {
         for(int y = -700; y < -300; y = y + 30)
         {
-            GameObject* brick = new Brick(ball, x, y);
-            items.append(brick);
-            scene->addItem(brick->getItem());
-
+            if(s_bricks.contains(cpt))
+            {
+                GameObject* brick = new Br_Ball(balles, x, y);
+                QObject::connect(brick, SIGNAL(new_Ball()), this, SLOT(add_Ball()));
+                items.append(brick);
+                scene->addItem(brick->getItem());
+            }else
+            {
+                GameObject* brick = new Brick(balles, x, y);
+                items.append(brick);
+                scene->addItem(brick->getItem());
+            }
+            cpt ++;
         }
     }
 
-    racket = new Racket(ball);
+    racket = new Racket(balles);
     items.append(racket);
     scene->addItem(racket->getItem());
 
@@ -50,13 +84,14 @@ MainWindow::MainWindow() : QWidget()
 
     view = new QGraphicsView(scene, this);
     view->setFixedSize(606,703);
-    view->move(-3,0);
+    view->move(-3,50);
 
     view->show();
 
-    timer->start(5);
+    timer->start(speed);
 
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+    QObject::connect(ball, SIGNAL(lose_ball()), qApp, SLOT(quit()));
 
 }
 
@@ -65,12 +100,21 @@ MainWindow::~MainWindow()
 
 }
 
+void MainWindow::add_Ball()
+{
+    Ball* ball = new Ball(racket->getx()+25, racket->gety()-20);
+    balles->append(ball);
+    items.append(ball);
+    scene->addItem(ball->getItem());
+}
+
 void MainWindow::update()
 {
     QList<GameObject*>::iterator gameObject;
     for(gameObject = items.begin(); gameObject != items.end(); gameObject++){
         (*gameObject)->update();
     }
+    score->setText("Score : " + QString::number(Brick::score));
 
 }
 
@@ -84,6 +128,17 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     {
         racket->keyRight = true;
     }
+    if(event->nativeScanCode() == 74 )
+    {
+        speed = speed +1;
+        timer->setInterval(speed);
+    }
+    if(event->nativeScanCode() == 78 )
+    {
+        speed = speed -1;
+        timer->setInterval(speed);
+    }
+
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event)
