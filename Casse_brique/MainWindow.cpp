@@ -169,18 +169,19 @@ void MainWindow::m_brick_broken(Brick* b)
 
 void MainWindow::lost_Ball(Ball* ball)
 {
+    qDebug() << "Balles : " << balles->size();
+    qDebug() << "Items  : " << items.size();
     int index = balles->indexOf(ball);
     scene->removeItem(ball->getItem());
     balles->removeAt(index);
 
     index = items.indexOf(ball);
     items.removeAt(index);
+    qDebug() << "Balles : " << balles->size();
+    qDebug() << "Items  : " << items.size();
 
     delete ball;
+    qDebug() << "Delete " ;
 
-    if(balles->size() < 1)
-    {
-
-    }
 }
 
