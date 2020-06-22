@@ -55,12 +55,14 @@ MainWindow::MainWindow() : QWidget()
             if(s_bricks.contains(cpt))
             {
                 GameObject* brick = new Br_Ball(balles, x, y);
-                QObject::connect(brick, SIGNAL(new_Ball()), this, SLOT(add_Ball()));
+                QObject::connect(brick, SIGNAL(new_Ball(Brick*)), this, SLOT(m_add_Ball(Brick*)));
+                //QObject::connect(brick, SIGNAL(brick_broken(Brick*)), this, SLOT(m_brick_broken(Brick*)));
                 items.append(brick);
                 scene->addItem(brick->getItem());
             }else
             {
                 GameObject* brick = new Brick(balles, x, y);
+                QObject::connect(brick, SIGNAL(brick_broken(Brick*)), this, SLOT(m_brick_broken(Brick*)));
                 items.append(brick);
                 scene->addItem(brick->getItem());
             }
@@ -90,8 +92,8 @@ MainWindow::MainWindow() : QWidget()
 
     timer->start(speed);
 
-    connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    QObject::connect(ball, SIGNAL(lose_ball()), qApp, SLOT(quit()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(m_update()));
+    QObject::connect(ball, SIGNAL(lose_ball(Ball*)), this, SLOT(lost_Ball(Ball*)));
 
 }
 
@@ -100,15 +102,18 @@ MainWindow::~MainWindow()
 
 }
 
-void MainWindow::add_Ball()
+void MainWindow::m_add_Ball(Brick* b)
 {
     Ball* ball = new Ball(racket->getx()+25, racket->gety()-20);
     balles->append(ball);
     items.append(ball);
     scene->addItem(ball->getItem());
+    QObject::connect(ball, SIGNAL(lose_ball(Ball*)), this, SLOT(lost_Ball(Ball*)));
+
+    m_brick_broken(b);
 }
 
-void MainWindow::update()
+void MainWindow::m_update()
 {
     QList<GameObject*>::iterator gameObject;
     for(gameObject = items.begin(); gameObject != items.end(); gameObject++){
@@ -150,6 +155,32 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     if(event->nativeScanCode() == 25 && racket->keyRight)
     {
         racket->keyRight = false;
+    }
+}
+
+void MainWindow::m_brick_broken(Brick* b)
+{
+    int index = items.indexOf(b);
+    items.removeAt(index);
+    scene->removeItem(b->getItem());
+
+    delete b;
+}
+
+void MainWindow::lost_Ball(Ball* ball)
+{
+    int index = balles->indexOf(ball);
+    scene->removeItem(ball->getItem());
+    balles->removeAt(index);
+
+    index = items.indexOf(ball);
+    items.removeAt(index);
+
+    delete ball;
+
+    if(balles->size() < 1)
+    {
+
     }
 }
 

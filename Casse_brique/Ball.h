@@ -12,7 +12,7 @@ class Ball : public GameObject
         QGraphicsItem* getItem();
         void update();
     signals:
-        void lose_ball();
+        void lose_ball(Ball*);
 
     private:
         QGraphicsEllipseItem* ball;

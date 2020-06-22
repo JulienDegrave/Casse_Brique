@@ -71,8 +71,7 @@ void Brick::update()
 
 void Brick::del()
 {
-    this->x += 1000;
-    rect->setRect(QRectF(1000, 1000, 0, 0));
+    emit brick_broken(this);
 }
 void Brick::setColor()
 {
@@ -139,7 +138,7 @@ void Br_Ball::update()
 {
     if(hit)
     {
-        emit new_Ball();
+        emit new_Ball(this);
     }
     Brick::update();
 }

@@ -31,7 +31,8 @@ void Ball::update()
     }
     if(y>-20)
     {
-        emit lose_ball();
+        qDebug()<< " ball Balle perdu";
+        emit lose_ball(this);
     }
     if((x < -305)||(x>270))
     {

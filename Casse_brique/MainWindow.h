@@ -12,6 +12,7 @@
 #include <QLabel>
 #include <QList>
 #include <Ball.h>
+#include <Brick.h>
 
 class MainWindow: public QWidget
 {
@@ -23,8 +24,10 @@ class MainWindow: public QWidget
         void keyPressEvent(QKeyEvent *event);
         void keyReleaseEvent(QKeyEvent *event);
     public slots :
-        void update();
-        void add_Ball();
+        void m_update();
+        void m_add_Ball(Brick*);
+        void lost_Ball(Ball*);
+        void m_brick_broken(Brick*);
 
     private:
         QGraphicsView *view;

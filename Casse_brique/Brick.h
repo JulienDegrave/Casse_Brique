@@ -7,6 +7,7 @@
 
 class Brick : public GameObject
 {
+    Q_OBJECT
     public:
         Brick(QList<Ball*>* ball, int x, int y);
         QGraphicsItem* getItem();
@@ -14,6 +15,8 @@ class Brick : public GameObject
         void del();
         void setColor();
         static int score;
+    signals :
+        void brick_broken(Brick*);
     protected:
         QGraphicsRectItem* rect;
         QList<Ball*>* ball;
@@ -39,7 +42,7 @@ class Br_Ball: public Brick
         QGraphicsItem* getItem();
         void update();
     signals:
-    void new_Ball();
+        void new_Ball(Brick*);
     private:
 };
 
