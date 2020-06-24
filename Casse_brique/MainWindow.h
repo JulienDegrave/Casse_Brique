@@ -32,7 +32,6 @@ class MainWindow: public QWidget
     private:
         QGraphicsView *view;
         QGraphicsScene *scene;
-        QGraphicsRectItem* rect;
         QTimer * timer;
         QList<GameObject*> items;
         Racket* racket;

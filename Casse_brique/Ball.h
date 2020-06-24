@@ -9,6 +9,7 @@ class Ball : public GameObject
 
     public:
         Ball(int x = -10, int y = -100);
+        ~Ball();
         QGraphicsItem* getItem();
         void update();
     signals:

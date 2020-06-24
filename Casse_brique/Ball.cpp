@@ -12,10 +12,15 @@
 
 Ball::Ball(int x, int y) : GameObject(x, y, 20,20, new QVector2D((double)((qrand() % (140 + 1)) - 70)/100 , -1))
 {
-    qDebug() << this->getv()->x() << (double)((qrand() % (140 + 1)) - 70)/100 ;
     ball = new QGraphicsEllipseItem(x,y,w,h);
     ball->setBrush(Qt::red);
+    qDebug() << "BALLE : " << ball;
 
+}
+
+Ball::~Ball()
+{
+    delete ball;
 }
 
 QGraphicsItem* Ball::getItem()
@@ -31,7 +36,6 @@ void Ball::update()
     }
     if(y>-20)
     {
-        qDebug()<< " ball Balle perdu";
         emit lose_ball(this);
     }
     if((x < -305)||(x>270))

@@ -74,14 +74,6 @@ MainWindow::MainWindow() : QWidget()
     items.append(racket);
     scene->addItem(racket->getItem());
 
-    GameObject* testt = new GameObject(400,20,40,60,0);
-    QGraphicsTextItem* test = new QGraphicsTextItem(QString::number(Brick::score));
-    test->setFont(QFont("Times", 20, QFont::Bold));
-    test->setHtml("<p style=\"text-indent:0px; background-color:red; font-size:20pt;\"></p>");
-    testt->setItem(test);
-    items.append(testt);
-    scene->addItem(testt->getItem());
-
     scene->setSceneRect(-300,-695, 600, 700);
 
     view = new QGraphicsView(scene, this);
@@ -116,9 +108,11 @@ void MainWindow::m_add_Ball(Brick* b)
 void MainWindow::m_update()
 {
     QList<GameObject*>::iterator gameObject;
-    for(gameObject = items.begin(); gameObject != items.end(); gameObject++){
+    for(gameObject = items.begin(); gameObject != items.end(); gameObject++)
+    {
         (*gameObject)->update();
     }
+
     score->setText("Score : " + QString::number(Brick::score));
 
 }
@@ -169,19 +163,16 @@ void MainWindow::m_brick_broken(Brick* b)
 
 void MainWindow::lost_Ball(Ball* ball)
 {
-    qDebug() << "Balles : " << balles->size();
-    qDebug() << "Items  : " << items.size();
     int index = balles->indexOf(ball);
     scene->removeItem(ball->getItem());
     balles->removeAt(index);
 
-    index = items.indexOf(ball);
-    items.removeAt(index);
-    qDebug() << "Balles : " << balles->size();
-    qDebug() << "Items  : " << items.size();
 
-    delete ball;
-    qDebug() << "Delete " ;
+    qDebug() << " ball : " << ball;
+    index = items.indexOf(ball);
+    qDebug() << "Taille item : " << items.size();
+    qDebug() << "index : " << index;
+    qDebug() << "Items ball : "<< items.takeAt(index);
 
 }
 
